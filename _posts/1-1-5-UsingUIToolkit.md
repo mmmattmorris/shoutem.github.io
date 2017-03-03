@@ -113,7 +113,7 @@ We didn't create `shortcut` as this screen is not going to be the first screen o
 
 When restaurant in the list is touched, we will open details screen for that restaurant. To make views respond to touches, use [TouchableOpacity](https://facebook.github.io/react-native/docs/touchableopacity.html) component from React Native. Shoutem's `navigateTo` redux action creator is used to navigate to another screen.
 
-To get the full name of `Details` screen, use `ext` function from `app/extension.js`. This function returns the full name for the extension part passed as its first argument (e.g. returns `michael.restaurants.Details` for `Details`) or extension `name` if no argument is passed.
+To get the full name of `Details` screen, use `ext` function from `app/extension.js`. This function returns the full name for the extension part passed as its first argument (e.g. returns `tom.restaurants.Details` for `Details`) or extension `name` if no argument is passed.
 
 Let's import these things:
 

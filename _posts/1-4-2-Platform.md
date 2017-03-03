@@ -8,10 +8,9 @@ section: Reference
 # Platform
 <hr />
 
-Shoutem platform defines an environment in which extensions are executed. This environment defines versions of React, React Native and other packages which are available to your extension by default.
+Shoutem platform defines an environment in which extensions are executed. This environment defines versions of React, React Native and other packages available to your extension by default.
 
-Upon initializing your extension with `shoutem init` command, CLI defines those packages as peer dependencies in your `app/package.json` file. They are available to all extensions without needing to install them, but their version is managed by the platform. That's why all the packages have `*` as a version.
-
+Upon initializing your extension with `shoutem init` command, CLI defines those packages as peer dependencies in your `app/package.json` file. They are available to all extensions without needing to install them, but their version is managed by the platform. That's why all the packages have `*` as the version.
 
 Here's an example of what `app/package.json` might look like after initialization:
 
