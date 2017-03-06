@@ -21,3 +21,4 @@ exclude: ['api-src/']
 # Variables
 shoutem:
     builderURL: "http://builder.beta.shoutem.com"
+    mobilizer: "/docs/coming-soon"
