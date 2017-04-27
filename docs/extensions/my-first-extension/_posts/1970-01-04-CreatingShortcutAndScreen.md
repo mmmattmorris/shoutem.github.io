@@ -10,9 +10,9 @@ section: My first extension
 
 Extension can have multiple screens in the app. Screens are [React components](https://facebook.github.io/react/docs/react-component.html) that represent a mobile screen. We want our extension to have 2 screens: one for the list of the restaurants and another for the details of one particular restaurant.
 
-Since app needs to know which screen to open the first for some extension, we need to create a ***shortcut*** alongside with creating a screen. Shortcut is the link to the starting screen of an extension. It's the item in the app navigation which opens the starting screen when user taps on it.
+Since our app needs to know which screen to open first for the extension, we need to create a ***shortcut*** alongside our screen. This shortcut is the link to the starting screen of an extension. It's the item in the app navigation which opens the starting screen when tapped by a user.
 
-List of the restaurants is going to be the first screen, so let's create it with shortcut:
+The restaurant list is going to be the first screen, so let's create it ***and*** a shortcut:
 
 ```ShellSession
 $ shoutem screen add List --shortcut Restaurants
@@ -47,11 +47,11 @@ Your `extension.json` was just modified:
 }
 ```
 
-Screen and shortcut were added to `extension.json` inside arrays. Property `name` uniquely identifies these extension parts. Shortcut's `title` is what will be shown in the app navigation.
+The screen and shortcut were added to `extension.json` inside arrays. The `name` property uniquely identifies these extension parts and the shortcut's `title` property is what will be shown in our app's navigation.
 
-Property `screen` inside of `shortcuts` array references the screen to be opened when user taps on that shortcut inside navigation. When referencing any extension part, we need to say which extension it came from. Full name of extension part follows this structure: `<developer-name>.<extension-name>.<extension-part-name>` (e.g. `{{ site.example.devName }}.restaurants.List)`. For extension parts within the same extension, use `@.<extension-part-name>` instead (e.g. `@.List`). Characters `@.` stands for `<developer-name>.<extension-name>.` of the current extension.
+The `screen` property inside the `shortcuts` array references the screen that should open when a user taps on the shortcut. When referencing any extension part, we need to specify which extension it came from. The full name of the extension part follows this structure: `<developer-name>.<extension-name>.<extension-part-name>` (e.g. `{{ site.example.devName }}.restaurants.List)`. For extension parts within the same extension, use `@.<extension-part-name>` instead (e.g. `@.List`). Characters `@.` stands for `<developer-name>.<extension-name>.` of the current extension.
 
-Shoutem CLI also created `app/screens/` folder with `List.js` file:
+Shoutem CLI also created `app/screens/` which contains `List.js`:
 
 ```javascript
 #file: app/screens/List.js
@@ -91,22 +91,22 @@ In React, `Component` specifies its UI in the `render` method.
 
 ## Extension in the app
 
-The `app` folder from your extension will be bundled with the rest of extensions into the app. If your extension uses some `npm` package, install it inside the `app` folder. Below is an example of installing [React Native swiper](https://github.com/leecade/react-native-swiper) (just an example, no need to execute following 2 commands).
+The `app` folder from this extension will be bundled into our app with the rest of our extensions. If the extension is an `npm` package, make sure to install it in the `app` directory. Below is an example of installing [React Native swiper](https://github.com/leecade/react-native-swiper) (note the following two commands are just an example).
 
-Locate to the `app` folder and install the package with saving the dependency in the `package.json`:
+Locate the `app` folder and install the package by saving the dependency in `package.json`:
 
 ```ShellSession
 $ cd app/
 $ npm install --save react-native-swiper
 ```
 
-This package would be installed upon bundling your extension into the app. You would be able to access it in any file in the `app` folder.
+This package would be installed upon bundling your extension into the app. You should be able to access it from within any file in the `app` directory.
 
 ## Exporting extension parts
 
-App expects extensions to export their parts (e.g. screens) in `app/index.js` file (standard JS practice). Extensions are like libraries and other extensions can reuse what they export from `app/index.js`. The convention is that `app/index.js` is public API of an extension and shouldn't be changed quite often.
+Our app expects its extensions to export their parts (i.e. screens) from `app/index.js` (as is standard JS practice). Extensions act like libraries, meaning that other extensions can use these exported components. The convention is that `app/index.js` is the public API of an extension and shouldn't be changed very often.
 
-Current `index.js` looks as follows:
+Currently, `index.js` looks like this:
 
 ```JSX
 #file: app/index.js
@@ -118,7 +118,7 @@ import * as extension from './extension.js';
 export const screens = extension.screens;
 ```
 
-On the other hand, `app/extension.js` file is managed by CLI and you should not change it. When creating screens, CLI writes their location in the `app/extension.js` which are exported in `app/index.js`.
+Since `app/extension.js` is managed by the CLI, we shouldn't have to change it. When creating a screen, the CLI writes the screen's location in `app/extension.js`, which is then exported into `app/index.js`.
 
 Upload your extension:
 
@@ -128,27 +128,27 @@ Uploading `Restaurants` extension to Shoutem...
 Success!
 ```
 
-Go to `Custom` under `Add Screen` modal in Shoutem builder. You can finally see your `Restaurants` starting screen (shortcut) there. 
+In Shoutem Builder, go to `Custom` within the `Add Screen` modal. You should see your `Restaurants` starting screen (shortcut) there. 
 
 <p class="image">
 <img src='{{ site.url }}/img/my-first-extension/add-modal-shortcut.png'/>
 </p>
 
 > #### Note
-> In case you don't see it, refresh the page in browser. 
+> If you don't see it, try refreshing your browser. 
 
-Click on the `Restaurants`, which will get that shortcut inserted into the navigation.
+Add your new extension to the navigation by clicking on `Restaurants`. 
 
-Let's preview our app now. We can preview it in the Builder, but it might take some time while the app preview shows. Every time you change an extension, we need to rebundle the whole app to the new extension. It's much faster to use **Shoutem Preview** app (available for [iOS]({{ site.shoutem.previewAppiOS }}) and [Android]({{ site.shoutem.previewAppAndroid }})) and Shoutem CLI, which can bundle only the changes in the extension.
+Let's preview our app now. We can preview it in the Builder, but it might take some time to load. Every time you update an extension, we need to rebundle the whole app to include the change. It's much faster to use the **Shoutem Preview** app (available for [iOS]({{ site.shoutem.previewAppiOS }}) and [Android]({{ site.shoutem.previewAppAndroid }})) alongside Shoutem CLI, which can quickly bundle the extension updates.
 
-Since the app is managed through the Builder, we needed to `push` the extension to Shoutem after creating screen and shortcut to add them to app navigation. However, when we're only changing the app code, we don't need to the `push`ing. Instead, use `shoutem link` to tell Shoutem CLI to bundle local code of your extension.
+Since the app is managed through the Builder, we need to `push` the extension to Shoutem after creating our screen and shortcut in order to add them to our app's navigation. Alternatively, if we're only changing our app's code, we can use `shoutem link` to bundle just the local code of our extension.
 
 ```ShellSession
 $ shoutem link
 Extension successfully linked. Please, kill the packager before running the app.
 ```
 
-Once extension is linked, run the app which will start the [React Native packager](https://github.com/facebook/react-native/tree/master/packager):
+Once the extension is linked, run the app again to start [React Native packager](https://github.com/facebook/react-native/tree/master/packager):
 
 ```ShellSession
 $ shoutem run
@@ -157,15 +157,15 @@ Creating the bundle for your app...
 ...
 ```
 
-This will output the QR code which you should scan with the Shoutem Preview app.
+This will output the QR code which you can scan with the Shoutem Preview app to preview the app on your device. 
 
 > #### Note
-> In the documentation the preview in the Builder will be screenshot, instead of screenshot from the Preview app. This way you'll see the state of the web interface as well. If you only change your app code, just shake your phone with the Shoutem Preview app on and tap the "Reload" button. If you `link` your extension, you won't need to do `shoutem push` everytime you change the app code.
+> Here we're using the in-browser preview, but we highly recommend using a physical device. That way, when you edit your code, you can just shake your device while using the Shoutem Preview app and tap the "Reload" button. And if you `link` your extension, you won't need to `shoutem push` everytime you change the app code.
 
-This is the result:
+Here's the result:
 
 <p class="image">
 <img src='{{ site.url }}/img/my-first-extension/extension-hello-world.png'/>
 </p>
 
-Our app only has a simple  _Hello World_ screen. Let's put some UI components on the screen.
+Our app only has a simple  _Hello World_ screen, so let's add some UI components to the screen.
